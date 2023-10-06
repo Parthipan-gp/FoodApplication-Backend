@@ -39,6 +39,11 @@ public class RestaurantServiceImpl implements IRestaurantService{
     }
 
     @Override
+    public Restaurant getRestaurantForId(int restaurantId) throws RestaurantNotFoundException {
+        return restaurantRepository.findById(restaurantId).get();
+    }
+
+    @Override
     public boolean deleteRestaurant() throws Exception {
 
         boolean flag=false;

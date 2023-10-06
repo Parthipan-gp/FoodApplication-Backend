@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-@CrossOrigin(origins="http://localhost:4200")
+//@CrossOrigin(origins="http://localhost:4200")
 @RestController
 @RequestMapping("/api/v3")
 public class RestaurantController {
@@ -58,6 +58,21 @@ public class RestaurantController {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping("/get/{restaurantId}")
+    ResponseEntity<?> getRestaurantForParticularId(@PathVariable int restaurantId) throws RestaurantNotFoundException{
+        try{
+            Restaurant returnedRestaurantDataForId= iRestaurantService.getRestaurantForId(restaurantId);
+            return new ResponseEntity<>(returnedRestaurantDataForId,HttpStatus.OK);
+        }
+        catch (RestaurantNotFoundException exception){
+            throw new RestaurantNotFoundException();
+        }
+        catch (Exception e){
+            return  new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 
 
 }

@@ -14,6 +14,7 @@ public class Restaurant {
     private String location;
     private String cuisine;
     private String image;
+    private int rating;
     private Address address;
     private List<Dish> dishList;
 
@@ -21,12 +22,13 @@ public class Restaurant {
 
     }
 
-    public Restaurant(Integer restaurantId, String restaurantName, String location, String cuisine, String image, Address address, List<Dish> dishList) {
+    public Restaurant(Integer restaurantId, String restaurantName, String location, String cuisine, String image, int rating, Address address, List<Dish> dishList) {
         this.restaurantId = restaurantId;
         this.restaurantName = restaurantName;
         this.location = location;
         this.cuisine = cuisine;
         this.image = image;
+        this.rating = rating;
         this.address = address;
         this.dishList = dishList;
     }
@@ -71,6 +73,14 @@ public class Restaurant {
         this.image = image;
     }
 
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
+    }
+
     public Address getAddress() {
         return address;
     }
@@ -95,6 +105,7 @@ public class Restaurant {
                 ", location='" + location + '\'' +
                 ", cuisine='" + cuisine + '\'' +
                 ", image='" + image + '\'' +
+                ", rating=" + rating +
                 ", address=" + address +
                 ", dishList=" + dishList +
                 '}';

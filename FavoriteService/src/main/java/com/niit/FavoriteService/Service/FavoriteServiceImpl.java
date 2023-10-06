@@ -69,11 +69,14 @@ public class FavoriteServiceImpl implements IFavoriteService {
             returnedUser.setRestaurantList(Arrays.asList(restaurant));
         }
         else{
+
+            for (int i=0;i<returnedUser.getRestaurantList().size();i++){
+                if (returnedUser.getRestaurantList().get(i).getRestaurantName().equals(restaurant.getRestaurantName())){
+                    throw new RestaurantAlreadyExists();
+                }
+            }
            List<Restaurant> returnedUserRestaurantList= returnedUser.getRestaurantList();
 
-           if(returnedUserRestaurantList.contains(restaurant)){
-               throw new RestaurantAlreadyExists();
-           }
            returnedUserRestaurantList.add(restaurant);
 
            returnedUser.setRestaurantList(returnedUserRestaurantList);

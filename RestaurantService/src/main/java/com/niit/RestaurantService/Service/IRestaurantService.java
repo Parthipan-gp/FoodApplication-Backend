@@ -10,6 +10,7 @@ public interface IRestaurantService {
 
     Restaurant save(Restaurant restaurant) throws RestaurantAlreadyExistsException;
     List<Restaurant>  getAllRestaurants();
+    Restaurant getRestaurantForId(int restaurantId) throws RestaurantNotFoundException;
 
     boolean deleteRestaurant() throws Exception;
 }

@@ -6,7 +6,6 @@ public class Dish {
      private String dishName;
      private int dishCost;
      private String dishType;
-
      private String dishImage;
 
      public Dish(){

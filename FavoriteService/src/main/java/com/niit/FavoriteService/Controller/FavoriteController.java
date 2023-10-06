@@ -2,6 +2,7 @@ package com.niit.FavoriteService.Controller;
 
 import com.niit.FavoriteService.Domain.Restaurant;
 import com.niit.FavoriteService.Domain.User;
+import com.niit.FavoriteService.Exception.RestaurantAlreadyExists;
 import com.niit.FavoriteService.Exception.RestaurantNotFoundException;
 import com.niit.FavoriteService.Exception.UserAlreadyExistsException;
 import com.niit.FavoriteService.Exception.UserNotFoundException;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
-@CrossOrigin(origins ="http://localhost:4200")
+//@CrossOrigin(origins ="http://localhost:4200")
 @RestController
 @RequestMapping("/api/v2")
 public class FavoriteController {
@@ -46,7 +47,7 @@ public class FavoriteController {
     }
 
     @PostMapping("/user/save")
-    ResponseEntity<?> saveRestaurant(@RequestBody Restaurant restaurant, HttpServletRequest request) throws UserNotFoundException {
+    ResponseEntity<?> saveRestaurant(@RequestBody Restaurant restaurant, HttpServletRequest request) throws UserNotFoundException, RestaurantAlreadyExists {
         System.out.println("controller layer invoked");
         try{
             System.out.println("header"+request.getHeader("Authorization"));
@@ -59,7 +60,10 @@ public class FavoriteController {
             User returnedUser= iFavoriteService.saveListOfRestaurants(restaurant,userEmail);
             return new ResponseEntity<>(returnedUser,HttpStatus.CREATED);
         }
-        catch (UserNotFoundException exception){
+        catch (RestaurantAlreadyExists exception){
+            throw new RestaurantAlreadyExists();
+        }
+        catch(UserNotFoundException exception){
             throw new UserNotFoundException();
         }
         catch (Exception e){
