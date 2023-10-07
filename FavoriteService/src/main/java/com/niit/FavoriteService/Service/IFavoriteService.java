@@ -22,4 +22,6 @@ public interface IFavoriteService {
     List<User> getAllUsers() throws Exception;
 
     boolean deleteUser() throws Exception;
+
+    User getUserById( String userEmail) throws  UserNotFoundException;
 }

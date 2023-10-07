@@ -136,4 +136,26 @@ public class FavoriteController {
         }
     }
 
+    @GetMapping("/user/getUser")
+    ResponseEntity<?> getUserByUserId(HttpServletRequest request)  throws UserNotFoundException{
+
+        try{
+            System.out.println("header"+request.getHeader("Authorization"));
+            Claims claims=(Claims)  request.getAttribute("claims");
+            System.out.println(claims);
+            String userEmail= claims.getSubject();
+            System.out.println("userEmail"+userEmail);
+
+            User returnedUser= iFavoriteService.getUserById(userEmail);
+            return new ResponseEntity<>(returnedUser,HttpStatus.OK);
+        }
+        catch (UserNotFoundException exception){
+            throw new UserNotFoundException();
+        }
+        catch (Exception e){
+            return  new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+
 }

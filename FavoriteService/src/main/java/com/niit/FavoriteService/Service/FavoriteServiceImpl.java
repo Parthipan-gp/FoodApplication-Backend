@@ -30,7 +30,7 @@ public class FavoriteServiceImpl implements IFavoriteService {
     @Override
     public User registerUser(User user) throws UserAlreadyExistsException {
 
-        System.out.println(" HI,service layer invoked");
+        System.out.println(" service layer invoked");
 
         if (favoriteRepository.findById(user.getUserEmail()).isPresent()){
             throw new UserAlreadyExistsException();
@@ -124,6 +124,16 @@ public class FavoriteServiceImpl implements IFavoriteService {
         flag=true;
 
         return flag;
+    }
+
+    @Override
+    public User getUserById(String userEmail) throws UserNotFoundException {
+
+        if(favoriteRepository.findById(userEmail).isEmpty()){
+            throw new UserNotFoundException();
+        }
+
+        return favoriteRepository.findById(userEmail).get();
     }
 
 
