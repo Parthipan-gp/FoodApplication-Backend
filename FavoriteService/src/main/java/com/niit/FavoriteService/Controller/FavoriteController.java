@@ -1,5 +1,6 @@
 package com.niit.FavoriteService.Controller;
 
+import com.niit.FavoriteService.Domain.Dish;
 import com.niit.FavoriteService.Domain.Restaurant;
 import com.niit.FavoriteService.Domain.User;
 import com.niit.FavoriteService.Exception.RestaurantAlreadyExists;
@@ -10,11 +11,18 @@ import com.niit.FavoriteService.Service.IFavoriteService;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.Map;
 
 //@CrossOrigin(origins ="http://localhost:4200")
 @RestController
@@ -91,7 +99,7 @@ public class FavoriteController {
     }
 
     @DeleteMapping("/user/delete/{restaurantId}")
-    ResponseEntity<?> deleteRestaurantList( int restaurantId, HttpServletRequest request) throws UserNotFoundException, RestaurantNotFoundException {
+    ResponseEntity<?> deleteRestaurantList(@PathVariable int restaurantId, HttpServletRequest request) throws UserNotFoundException, RestaurantNotFoundException {
 
         try{
             System.out.println("header"+request.getHeader("Authorization"));
@@ -156,6 +164,39 @@ public class FavoriteController {
             return  new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
+    }
+
+    private static final String UPLOAD_DIR = "C:/Users/admin/Documents";
+
+    @PostMapping(path = "/upload")
+    public String uploadFile(@RequestParam("file") MultipartFile file) {
+        try {
+            byte[] bytes = file.getBytes();
+            Path path = Paths.get(UPLOAD_DIR + "/" + file.getOriginalFilename());
+            Files.write(path, bytes);
+            return "File uploaded successfully!";
+        } catch (IOException e) {
+            return "File upload failed: " + e.getMessage();
+        }
+    }
+
+    @GetMapping("/user/get/{restaurantId}/{dishId}")
+    ResponseEntity<?> getDishById(@PathVariable int restaurantId,@PathVariable int dishId, HttpServletRequest request) throws UserNotFoundException{
+
+        try{
+            System.out.println("header"+request.getHeader("Authorization"));
+            Claims claims=(Claims) request.getAttribute("claims");
+            System.out.println(claims);
+            String userEmail= claims.getSubject();
+            Dish  returnedDishObject= iFavoriteService.getDishById( restaurantId,dishId,userEmail);
+            return new ResponseEntity<>(returnedDishObject,HttpStatus.OK);
+        }
+        catch (UserNotFoundException exception){
+            throw new UserNotFoundException();
+        }
+        catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 }

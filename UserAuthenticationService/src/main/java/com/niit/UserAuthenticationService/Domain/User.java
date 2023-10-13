@@ -2,6 +2,7 @@ package com.niit.UserAuthenticationService.Domain;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 
 @Entity
 public class User {
@@ -9,6 +10,8 @@ public class User {
     @Id
     private  String userEmail;
     private String userPassword;
+    @Lob
+    private byte[] image;
 
     public User(){
 

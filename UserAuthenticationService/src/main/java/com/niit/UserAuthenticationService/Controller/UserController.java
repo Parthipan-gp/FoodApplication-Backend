@@ -32,6 +32,8 @@ public class UserController {
     }
 
 
+
+
     @PostMapping("/save")
     ResponseEntity<?> registerUser(@RequestBody User user)throws UserAlreadyExistsException {
 

@@ -2,7 +2,7 @@ package com.niit.FavoriteService.Domain;
 
 public class Dish {
 
-     private int dishId;
+     private Integer dishId;
      private String dishName;
      private int dishCost;
      private String dishType;
@@ -20,7 +20,7 @@ public class Dish {
           this.dishImage = dishImage;
      }
 
-     public int getDishId() {
+     public Integer getDishId() {
           return dishId;
      }
 

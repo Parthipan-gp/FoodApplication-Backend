@@ -13,14 +13,14 @@ public class User {
     private String userPassword;
     private String  userName;
     private long  userPhoneNo;
-    private String userImage;
+    private byte[] userImage;
     private List<Restaurant> restaurantList;
 
     public User(){
 
     }
 
-    public User(String userEmail, String userPassword, String userName, long userPhoneNo, String userImage, List<Restaurant> restaurantList) {
+    public User(String userEmail, String userPassword, String userName, long userPhoneNo, byte[] userImage, List<Restaurant> restaurantList) {
         this.userEmail = userEmail;
         this.userPassword = userPassword;
         this.userName = userName;
@@ -61,11 +61,11 @@ public class User {
         this.userPhoneNo = userPhoneNo;
     }
 
-    public String getUserImage() {
+    public byte[] getUserImage() {
         return userImage;
     }
 
-    public void setUserImage(String userImage) {
+    public void setUserImage(byte[] userImage) {
         this.userImage = userImage;
     }
 

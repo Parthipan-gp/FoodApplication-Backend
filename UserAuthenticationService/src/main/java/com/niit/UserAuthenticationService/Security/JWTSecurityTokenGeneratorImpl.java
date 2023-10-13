@@ -37,6 +37,7 @@ public class JWTSecurityTokenGeneratorImpl implements SecurityTokenGenerator {
 
         map.put("token",jwtToken);
         map.put("message",String.valueOf(1));
+        map.put("username",subject);
 
         return map;
 

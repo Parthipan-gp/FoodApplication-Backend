@@ -1,5 +1,6 @@
 package com.niit.FavoriteService.Service;
 
+import com.niit.FavoriteService.Domain.Dish;
 import com.niit.FavoriteService.Domain.Restaurant;
 import com.niit.FavoriteService.Domain.User;
 import com.niit.FavoriteService.Exception.RestaurantAlreadyExists;
@@ -11,9 +12,13 @@ import com.niit.FavoriteService.Repository.FavoriteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class FavoriteServiceImpl implements IFavoriteService {
@@ -134,6 +139,30 @@ public class FavoriteServiceImpl implements IFavoriteService {
         }
 
         return favoriteRepository.findById(userEmail).get();
+    }
+
+    @Override
+    public Dish getDishById(int restaurantId,int dishId, String userEmail) throws UserNotFoundException {
+
+        if (favoriteRepository.findById(userEmail).isEmpty()){
+            throw new UserNotFoundException();
+        }
+
+        User returnedUserObject= favoriteRepository.findById(userEmail).get();
+
+       List<Restaurant> existingRestaurantList= returnedUserObject.getRestaurantList();
+
+       for(int i =0;i<existingRestaurantList.size();i++){ //since we have list of restaurants for 1 user , we have to match the  incoming restaurant id from the list of restaurants
+           if(existingRestaurantList.get(i).getRestaurantId().equals(restaurantId)){   // filtering out 1 restaurant which has list of dishes
+              List<Dish> existingDishListForOneRestaurant= existingRestaurantList.get(i).getDishList();   // existingRestaurantList.get(i) means when i=0(i.e ), it denotes that particular restaurant id we are retreiving the dishlist  and storing it in a variable(List<Dish>)
+              for (int j=0;j<existingDishListForOneRestaurant.size();j++) { //since we have list of dishes for one restaurant ,so we have to match the incoming Dishid from the list od dishes
+                  if (existingDishListForOneRestaurant.get(j).getDishId().equals(dishId)) {
+                      return existingDishListForOneRestaurant.get(j); // retreiving that particular dish for the specified restaurant id
+                  }
+              }
+           }
+       }
+        return null;
     }
 
 
