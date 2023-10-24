@@ -1,7 +1,10 @@
 package com.niit.FavoriteService.Domain;
 
+import org.springframework.data.annotation.Id;
+
 public class Dish {
 
+     @Id
      private Integer dishId;
      private String dishName;
      private int dishCost;

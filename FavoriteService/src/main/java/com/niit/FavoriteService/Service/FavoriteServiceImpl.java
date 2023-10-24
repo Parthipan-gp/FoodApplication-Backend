@@ -3,10 +3,7 @@ package com.niit.FavoriteService.Service;
 import com.niit.FavoriteService.Domain.Dish;
 import com.niit.FavoriteService.Domain.Restaurant;
 import com.niit.FavoriteService.Domain.User;
-import com.niit.FavoriteService.Exception.RestaurantAlreadyExists;
-import com.niit.FavoriteService.Exception.RestaurantNotFoundException;
-import com.niit.FavoriteService.Exception.UserAlreadyExistsException;
-import com.niit.FavoriteService.Exception.UserNotFoundException;
+import com.niit.FavoriteService.Exception.*;
 import com.niit.FavoriteService.Proxy.UserProxy;
 import com.niit.FavoriteService.Repository.FavoriteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -142,8 +139,9 @@ public class FavoriteServiceImpl implements IFavoriteService {
     }
 
     @Override
-    public Dish getDishById(int restaurantId,int dishId, String userEmail) throws UserNotFoundException {
+    public Dish getDishById(int restaurantId,int dishId, String userEmail) throws UserNotFoundException, DishNotFoundException, RestaurantNotFoundException {
 
+        System.out.println("service layer invoked");
         if (favoriteRepository.findById(userEmail).isEmpty()){
             throw new UserNotFoundException();
         }
@@ -152,18 +150,48 @@ public class FavoriteServiceImpl implements IFavoriteService {
 
        List<Restaurant> existingRestaurantList= returnedUserObject.getRestaurantList();
 
-       for(int i =0;i<existingRestaurantList.size();i++){ //since we have list of restaurants for 1 user , we have to match the  incoming restaurant id from the list of restaurants
-           if(existingRestaurantList.get(i).getRestaurantId().equals(restaurantId)){   // filtering out 1 restaurant which has list of dishes
-              List<Dish> existingDishListForOneRestaurant= existingRestaurantList.get(i).getDishList();   // existingRestaurantList.get(i) means when i=0(i.e ), it denotes that particular restaurant id we are retreiving the dishlist  and storing it in a variable(List<Dish>)
-              for (int j=0;j<existingDishListForOneRestaurant.size();j++) { //since we have list of dishes for one restaurant ,so we have to match the incoming Dishid from the list od dishes
-                  if (existingDishListForOneRestaurant.get(j).getDishId().equals(dishId)) {
-                      return existingDishListForOneRestaurant.get(j); // retreiving that particular dish for the specified restaurant id
-                  }
-              }
-           }
-       }
-        return null;
+       Restaurant specificRestaurant=null;
+
+       Dish specificDish=null;
+
+
+        for (Restaurant restaurant:existingRestaurantList) {
+
+            if (restaurant.getRestaurantId().equals(restaurantId)){
+
+                specificRestaurant=restaurant;
+
+               List<Dish> dishList= specificRestaurant.getDishList();
+
+                for (Dish dish:dishList ) {
+
+                    if (dish.getDishId().equals(dishId)){
+
+                        return specificDish=dish;
+                    }
+                }
+                throw new DishNotFoundException();
+            }
+        }
+        throw new RestaurantNotFoundException();
     }
 
 
 }
+
+//  //iterate though the restaurant list
+//      for(int i=0;i<existingRestaurantList.size();i++){
+//          //matching the incoming restaurant id with the existing restaurant id
+//          if (existingRestaurantList.get(i).getRestaurantId().equals(restaurantId)){
+//              //getDish list for matched restaurantid
+//             List<Dish> dishListOfMatchedRestaurant= existingRestaurantList.get(i).getDishList();
+//             //iterate through dishlist of matched restaurant
+//              for (int j=0;j<dishListOfMatchedRestaurant.size();j++){
+//                  //match to incoming dishId with the existing dishId
+//                  if (dishListOfMatchedRestaurant.get(j).getDishId().equals(dishId)){
+//                     Dish dishObjectForRestaurantId= dishListOfMatchedRestaurant.get(j);
+//                  }
+//              }
+//
+//          }
+//      }

@@ -170,12 +170,19 @@ public class FavoriteController {
 
     @PostMapping(path = "/upload")
     public String uploadFile(@RequestParam("file") MultipartFile file) {
+        System.out.println("upload method  invoked");
         try {
             byte[] bytes = file.getBytes();
             Path path = Paths.get(UPLOAD_DIR + "/" + file.getOriginalFilename());
+            System.out.println(path);
             Files.write(path, bytes);
+            System.out.println("write method");
             return "File uploaded successfully!";
         } catch (IOException e) {
+            System.out.println(e);
+            return "File upload failed: " + e.getMessage();
+        }
+        catch (Exception e){
             return "File upload failed: " + e.getMessage();
         }
     }
@@ -188,6 +195,7 @@ public class FavoriteController {
             Claims claims=(Claims) request.getAttribute("claims");
             System.out.println(claims);
             String userEmail= claims.getSubject();
+            System.out.println("userEmail"+userEmail);
             Dish  returnedDishObject= iFavoriteService.getDishById( restaurantId,dishId,userEmail);
             return new ResponseEntity<>(returnedDishObject,HttpStatus.OK);
         }

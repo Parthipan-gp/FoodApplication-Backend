@@ -3,10 +3,7 @@ package com.niit.FavoriteService.Service;
 import com.niit.FavoriteService.Domain.Dish;
 import com.niit.FavoriteService.Domain.Restaurant;
 import com.niit.FavoriteService.Domain.User;
-import com.niit.FavoriteService.Exception.RestaurantAlreadyExists;
-import com.niit.FavoriteService.Exception.RestaurantNotFoundException;
-import com.niit.FavoriteService.Exception.UserAlreadyExistsException;
-import com.niit.FavoriteService.Exception.UserNotFoundException;
+import com.niit.FavoriteService.Exception.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -29,5 +26,5 @@ public interface IFavoriteService {
 
     User getUserById( String userEmail) throws  UserNotFoundException;
 
-    Dish getDishById(int restaurantId,int dishId, String userEmail) throws UserNotFoundException;
+    Dish getDishById(int restaurantId,int dishId, String userEmail) throws UserNotFoundException ,RestaurantNotFoundException, DishNotFoundException;
 }
